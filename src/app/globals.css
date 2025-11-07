@@ -1,15 +1,83 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-neutral-10: var(--neutral-10);
+  --color-neutral-20: var(--neutral-20);
+  --color-neutral-30: var(--neutral-30);
+  --color-neutral-40: var(--neutral-40);
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-60: var(--neutral-60);
+  --color-neutral-70: var(--neutral-70);
+  --color-neutral-80: var(--neutral-80);
+  --color-neutral-90: var(--neutral-90);
+  --color-neutral-100: var(--neutral-100);
+  --color-primary-main: var(--primary-main);
+  --color-primary-surface: var(--primary-surface);
+  --color-primary-border: var(--primary-bordern);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-pressed: var(--primary-pressed);
+  --color-primary-focus: var(--primary-focus);
+  --color-danger-main: var(--danger-main);
+  --color-danger-surface: var(--danger-surface);
+  --color-danger-border: var(--danger-border);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-pressed: var(--danger-pressed);
+  --color-danger-focus: var(--danger-focus);
+  --color-warning-main: var(--warning-main);
+  --color-warning-surface: var(--warning-surface);
+  --color-warning-border: var(--warning-border);
+  --color-warning-hover: var(--warning-hover);
+  --color-warning-pressed: var(--warning-pressed);
+  --color-warning-pressed-2: var(--warning-pressed-2);
+  --color-success-main: var(--success-main);
+  --color-success-surface: var(--success-surface);
+  --color-success-border: var(--success-border);
+  --color-success-hover: var(--success-hover);
+  --color-success-pressed: var(--success-pressed);
+  --color-success-pressed-2: var(--success-pressed-2);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --neutral-10: #ffffff;
+  --neutral-20: #fafafa;
+  --neutral-30: #ededed;
+  --neutral-40: #e0e0e0;
+  --neutral-50: #c2c2c2;
+  --neutral-60: #9e9e9e;
+  --neutral-70: #757575;
+  --neutral-80: #616161;
+  --neutral-90: #404040;
+  --neutral-100: #1d1f20;
+  --primary-main: #01959f;
+  --primary-surface: #f3fbfc;
+  --primary-border: #4db5bc;
+  --primary-hover: #01777f;
+  --primary-pressed: #01595f;
+  --primary-focus: #01959f33;
+  --danger-main: #e01428;
+  --danger-surface: #fff9fa;
+  --danger-border: #f5b1b7;
+  --danger-hover: #bc1121;
+  --danger-pressed: #700a14;
+  --danger-focus: #e0142833;
+  --warning-main: #ca7336;
+  --warning-surface: #fcf7f3;
+  --warning-border: #feb17b;
+  --warning-hover: #b1652f;
+  --warning-pressed: #985628;
+  --warning-pressed-2: #ca733633;
+  --success-main: #43936c;
+  --success-surface: #f7f7f7;
+  --success-border: #b8dbca;
+  --success-hover: #367a59;
+  --success-pressed: #20573d;
+  --success-pressed-2: #73191233;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -1,9 +1,7 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
     <section>
-      <p>This is first page</p>
+      <p className="text-danger-main">This is first page yes</p>
     </section>
   );
 }
