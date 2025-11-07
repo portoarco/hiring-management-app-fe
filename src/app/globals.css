@@ -21,6 +21,11 @@
   --color-primary-hover: var(--primary-hover);
   --color-primary-pressed: var(--primary-pressed);
   --color-primary-focus: var(--primary-focus);
+  --color-secondary-main: var(--secondary-main);
+  --color-secondary-border: var(--secondary-border);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-pressed: var(--secondary-pressed);
+  --color-secondary-focus: var(--secondary-focus);
   --color-danger-main: var(--danger-main);
   --color-danger-surface: var(--danger-surface);
   --color-danger-border: var(--danger-border);
@@ -60,6 +65,12 @@
   --primary-hover: #01777f;
   --primary-pressed: #01595f;
   --primary-focus: #01959f33;
+  --secondary-main: #fbc037;
+  --secondary-surface: #fffcf5;
+  --secondary-border: #feeabc;
+  --secondary-hover: #f8a92f;
+  --secondary-pressed: #fa9810;
+  --secondary-focus: #fbc03733;
   --danger-main: #e01428;
   --danger-surface: #fff9fa;
   --danger-border: #f5b1b7;
