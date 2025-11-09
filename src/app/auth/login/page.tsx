@@ -1,17 +1,51 @@
 "use client";
+import TooltipHover from "@/components/tooltip-awareness";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import YellowButton from "@/components/yellow-button";
-import Link from "next/link";
-import AuthLayoutWrapper from "../layoutWrapper";
+import {
+  EnvelopeIcon,
+  ExclamationTriangleIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  KeyIcon,
+} from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { EnvelopeIcon, KeyIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import { useState } from "react";
-import TooltipHover from "@/components/tooltip-awareness";
+import AuthLayoutWrapper from "../layoutWrapper";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { LoginSchema, loginSchema } from "@/lib/schema/loginSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function LoginPage() {
   const [showLoginPass, setShowLoginPass] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      loginByPassword: false,
+    },
+  });
+
+  const onSubmit = async (data: LoginSchema) => {
+    console.log("Mulai submit:", data);
+    // Simulasi pemanggilan API selama 2 detik
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    console.log("Submit selesai");
+  };
+
   return (
     <AuthLayoutWrapper>
       <span className="font-bold text-[20px] leading-8 mb-2">
@@ -25,19 +59,70 @@ export default function LoginPage() {
           </Link>
         </span>
       </p>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         {/* Form */}
-        <label className="text-s-regular mb-2.5">Alamat Email</label>
-        <div className="w-full flex flex-col gap-5">
-          <Input className="focus-visible:ring-primary-main hover:border-primary-main hover:border-2" />
+        <label className="text-s-regular mb-2.5" htmlFor="email">
+          Alamat Email
+        </label>
+        <div id="email" className="w-full flex flex-col gap-5">
+          <Input
+            {...register("email")}
+            className={`  ${
+              errors.email
+                ? "focus-visible:ring-danger-main hover:border-danger-main hover:border-2"
+                : "focus-visible:ring-primary-main hover:border-primary-main hover:border-2"
+            }`}
+          />
         </div>
+        {errors.email && (
+          <div className="flex items-center mt-2 gap-2">
+            <ExclamationTriangleIcon className="text-danger-main size-5" />
+            <p className="text-danger-main text-sm">{errors.email.message}</p>
+          </div>
+        )}
         <div hidden={!showLoginPass} className="mt-2">
           <TooltipHover label="Fitur login dengan kata sandi akan dihapus. Pastikan emailmu valid untuk login melalui email atau Google">
-            <label className="text-s-regular mb-2.5">Password</label>
+            <label className="text-s-regular mb-2.5" htmlFor="password">
+              Password
+            </label>
           </TooltipHover>
-          <div className="w-full flex flex-col gap-5">
-            <Input className="focus-visible:ring-primary-main hover:border-primary-main hover:border-2" />
+          <div className="w-full flex flex-col gap-5 relative">
+            <Input
+              {...register("password")}
+              className={`  ${
+                errors.password
+                  ? "focus-visible:ring-danger-main hover:border-danger-main hover:border-2"
+                  : "focus-visible:ring-primary-main hover:border-primary-main hover:border-2"
+              }`}
+              type={showPassword ? "text" : "password"}
+            />
+
+            {showPassword ? (
+              <button
+                type="button"
+                className="absolute size-5 right-2 top-1/4 cursor-pointer"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                <EyeSlashIcon />
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="absolute size-5 right-2 top-1/4 cursor-pointer"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                <EyeIcon />
+              </button>
+            )}
           </div>
+          {errors.password && (
+            <div className="flex items-center mt-2 gap-2">
+              <ExclamationTriangleIcon className="text-danger-main size-5" />
+              <p className="text-danger-main text-sm">
+                {errors.password.message}
+              </p>
+            </div>
+          )}
         </div>
       </form>
 
@@ -45,15 +130,41 @@ export default function LoginPage() {
       <div className="flex flex-col gap-3 mt-5">
         <YellowButton
           hidden={showLoginPass}
-          label="Kirim Link"
           className="w-full"
-        />
+          onClick={() => {
+            setValue("loginByPassword", false);
+            handleSubmit(onSubmit)();
+          }}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>
+              <Spinner />
+              <span>Please wait</span>
+            </>
+          ) : (
+            "Kirim Link"
+          )}
+        </YellowButton>
         {/* Btn Login Manually */}
         <YellowButton
-          label="Masuk"
           className="w-full"
           hidden={!showLoginPass}
-        />
+          onClick={() => {
+            setValue("loginByPassword", true);
+            handleSubmit(onSubmit)();
+          }}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>
+              <Spinner />
+              <span>Please wait</span>
+            </>
+          ) : (
+            "Masuk"
+          )}
+        </YellowButton>
       </div>
       <div className="flex items-center gap-2 w-full mt-5">
         <Separator className="flex-1" />
@@ -84,13 +195,16 @@ export default function LoginPage() {
           <span className="text-m-bold">Kirim link login melalui email</span>
         </Button>
         {/* Google */}
-        <Button
-          type="button"
-          className="bg-white hover:bg-white cursor-pointer border border-neutral-40 shadow-xs text-black "
-        >
-          <Image src="/google.png" alt="google-icon" width={20} height={20} />
-          <span className="text-m-bold">Masuk dengan Google</span>
-        </Button>
+        <TooltipHover label="Fitur ini belum tersedia">
+          <Button
+            type="button"
+            className="bg-white hover:bg-white cursor-pointer border border-neutral-40 shadow-xs text-black "
+            disabled
+          >
+            <Image src="/google.png" alt="google-icon" width={20} height={20} />
+            <span className="text-m-bold">Masuk dengan Google</span>
+          </Button>
+        </TooltipHover>
       </div>
     </AuthLayoutWrapper>
   );
