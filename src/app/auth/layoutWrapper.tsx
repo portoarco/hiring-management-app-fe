@@ -9,8 +9,14 @@ export default function AuthLayoutWrapper({
   return (
     <section className="min-w-screen h-screen flex items-center justify-center ">
       <div className="">
-        <div className="relative w-36 h-12 ">
-          <Image src="/logo.png" alt="logo" fill className="object-contain" />
+        <div className="">
+          <Image
+            src="/logo.png"
+            alt="logo"
+            width={1000}
+            height={1000}
+            className="w-36"
+          />
         </div>
         <div className=" bg-neutral-10 w-[500px] p-10 shadow-sm">
           {children}
