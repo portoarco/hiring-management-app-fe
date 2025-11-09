@@ -69,6 +69,15 @@ export default function LoginPage() {
             </Link>
           </span>
         </p>
+        {/* Error Notification */}
+        <section className="mb-2 border border-danger-border bg-danger-surface rounded-sm px-5 py-1">
+          <p className="text-s-regular text-danger-main">
+            Email ini belum terdaftar sebagai akun di Rakamin Academy.{" "}
+            <strong>
+              <Link href="#">Daftar</Link>
+            </strong>
+          </p>
+        </section>
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Form */}
           <label className="text-s-regular mb-2.5" htmlFor="email">
