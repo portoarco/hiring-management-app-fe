@@ -64,20 +64,20 @@ export default function LoginPage() {
         <p className="text-m-regular mb-4 leading-6">
           Belum punya akun?{" "}
           <span>
-            <Link href="#" className="text-primary-main">
+            <Link href="/auth/register" className="text-primary-main">
               Daftar Menggunakan email
             </Link>
           </span>
         </p>
         {/* Error Notification */}
-        <section className="mb-2 border border-danger-border bg-danger-surface rounded-sm px-5 py-1">
+        {/* <section className="mb-2 border border-danger-border bg-danger-surface rounded-sm px-5 py-1">
           <p className="text-s-regular text-danger-main">
             Email ini belum terdaftar sebagai akun di Rakamin Academy.{" "}
             <strong>
               <Link href="#">Daftar</Link>
             </strong>
           </p>
-        </section>
+        </section> */}
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Form */}
           <label className="text-s-regular mb-2.5" htmlFor="email">
