@@ -8,4 +8,6 @@ export interface IJobDetails {
   placement: string;
   minSalary: string;
   maxSalary: string;
+  jobStatus: "Active" | "Inactive" | "Draft";
+  startedAt: Date;
 }

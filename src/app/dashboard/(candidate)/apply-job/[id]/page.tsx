@@ -38,7 +38,9 @@ export default function ApplyJob({ params }: IApplyJob) {
           <div id="form-data" className="mt-5">
             <form>
               <div id="photo">
-                <label className="text-s-bold ">Photo Profile</label>
+                <label className="text-s-bold ">
+                  Photo Profile <span className="text-danger-main">*</span>
+                </label>
                 <Avatar className="size-32 mt-2">
                   <AvatarImage src={"/avatar.png"}></AvatarImage>
                 </Avatar>
@@ -87,7 +89,7 @@ export default function ApplyJob({ params }: IApplyJob) {
                 <label className="text-s-regular">
                   Phone Number<span className="text-danger-main">*</span>
                 </label>
-                <Input placeholder="+6281XXXXX" />
+                <Input type="number" placeholder="6281XXXXX" />
               </div>
               <div className="mt-2">
                 <label className="text-s-regular">
