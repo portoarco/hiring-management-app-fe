@@ -54,7 +54,7 @@ export default function DashboardWrapper({ children }: IDashboardWrapper) {
               className="cursor-pointer"
               // onClick={() => setOpenDropdownProfile((prev) => !prev)}
             >
-              <AvatarImage src={user?.avatar}></AvatarImage>
+              <AvatarImage src={user?.avatar ?? "/avatar.png"}></AvatarImage>
             </Avatar>
             {/* <DropdownProfile
             open={openDropdownProfile}
