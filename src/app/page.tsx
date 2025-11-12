@@ -1,7 +1,9 @@
+import LoginPage from "./auth/login/page";
+
 export default function Home() {
   return (
-    <section>
-      <p className="text-danger-main">This is first page yes</p>
+    <section className="">
+      <LoginPage />
     </section>
   );
 }
