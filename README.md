@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hiring Management Web App
 
-## Getting Started
+This project is a high-fidelity, full-stack Hiring Management Web App built as a submission for a **Front End Engineer Case Study**.
 
-First, run the development server:
+The application serves two distinct user roles: Admin (Recruiter) and Applicant (Job Seeker), both managed via Role-Based Access Control (RBAC).
+
+**Key Objectives**
+- Recruiter and Applicant Dashboard: a secure portal for Recruiters to create and manage job vacancies; and Applicant browse the active job vacancies
+- Enterprise-Grade UX: building pixel-perfect UI that meets enterprise standards 
+- Responsive User Interface for all devices
+
+## Features
+
+- Role-Based Access Control/RBAC
+- Routing and Page Structure
+- Data Integration with Supabase
+- Responsive Design
+- Job Management Dashboard (Recruiter)
+- Job List Vacancies Portal (Applicant)
+- Feedback State/status handler
+
+
+## Run Locally
+
+Clone the Front End project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://github.com/portoarco/hiring-management-app-fe.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Clone the Back End project
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+  git clone https://github.com/portoarco/hiring-management-app-be.git
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Go to the Back End directory
 
-## Learn More
+```bash
+ cd hiring-management-app-be
+```
 
-To learn more about Next.js, take a look at the following resources:
+Install dependencies
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+  npm install
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create a .env file in the root of the Back-End project and fill in the required environment variables.
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Go to the Front End directory
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+ cd hiring-management-app-be
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+Create a .env file in the root of the Front-End project and fill in the required environment variables.
+
+Start both client and server
+
+```bash
+  npm run dev
+```
+
+
+
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+**FRONT END PROJECT**
+
+`NEXT_PUBLIC_API_URL="http://localhost:XXXX"`
+
+
+**BACK END PROJECT**
+
+`PORT=XXXXX`
+
+`FRONTEND_URL="http://localhost:XXXX"`
+
+`DATABASE_URL`
+
+`DIRECT_URL`
+
+`MAILSENDER` from Google Account API
+
+`MAILPASS` from Google Account API
+
+`TOKEN_KEY=abcdef`
+## Tech Stack
+
+**Client:** Next JS,Tailwind CSS, Zustand (Global State), Zod (Form Validator),
+
+**Server:** Node, Express, PostgreqSQL, Supabase (BaaS), Prisma ORM, 
+
