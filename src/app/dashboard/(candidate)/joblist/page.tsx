@@ -3,12 +3,14 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { formatSalaryToRupiah } from "@/utils/formatSalaryToRupiah";
 import { BanknotesIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import JobDetails from "./components/job-details";
 import { IJobDetails } from "@/types/job";
 import DropdownProfile from "@/components/DropdownProfile";
 import { dummyJob } from "@/api/dummyJobData";
 import DashboardWrapper from "../../dashboardWrapper";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function JobListPage() {
   const [showJobDetails, setShowJobDetails] = useState(false);
@@ -16,6 +18,15 @@ export default function JobListPage() {
     null
   );
   const [openDropdownProfile, setOpenDropdownProfile] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("user_token");
+    if (!token) {
+      toast.error("Silakan Login Dulu");
+      router.replace("/auth/login");
+    }
+  }, []);
   return (
     <>
       <DashboardWrapper>
@@ -30,7 +41,7 @@ export default function JobListPage() {
                   key={idx}
                   tabIndex={0}
                   id="job-card"
-                  className="border-2 border-success-main   p-3 lg:w-[300px] rounded-lg bg-primary-surface cursor-pointer"
+                  className="border-2 border-success-main   p-3 lg:w-[250px] rounded-lg bg-primary-surface cursor-pointer"
                   onClick={() => {
                     setSelectedJobCard(job);
                     setShowJobDetails(true);

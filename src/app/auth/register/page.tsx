@@ -3,57 +3,55 @@ import TooltipHover from "@/components/tooltip-awareness";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 import YellowButton from "@/components/yellow-button";
-import {
-  CheckBadgeIcon,
-  CheckIcon,
-  EnvelopeIcon,
-  ExclamationTriangleIcon,
-  EyeIcon,
-  EyeSlashIcon,
-  KeyIcon,
-} from "@heroicons/react/24/outline";
+import { RegisterSchema, registerSchema } from "@/lib/schema/loginSchema copy";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import AuthLayoutWrapper from "../layoutWrapper";
-import { useForm } from "react-hook-form";
-import z from "zod";
-import { LoginSchema, loginSchema } from "@/lib/schema/loginSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import AuthLayoutWrapper from "../layoutWrapper";
+import { apiCall } from "@/helper/apiCall";
 
 export default function LoginPage() {
-  const [showLoginPass, setShowLoginPass] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-
   const {
     register,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
-      password: "",
-      loginByPassword: false,
     },
   });
 
-  const onSubmit = async (data: LoginSchema) => {
-    console.log("Mulai submit:", data);
-    // Simulasi pemanggilan API selama 2 detik
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    if (data.loginByPassword === true) {
-      console.log("Anda login dengan password");
-    } else {
-      console.log("Anda login dengan email");
-      router.replace(`auth/auth-mailer/${encodeURIComponent(data.email)}`);
+  const onSubmit = async (data: RegisterSchema) => {
+    try {
+      const user_email = data.email;
+      const res = await apiCall.post(`/api/auth/register`, {
+        data: user_email,
+      });
+      console.log(res);
+      router.replace(`/auth/auth-mailer/${encodeURIComponent(data.email)}`);
       reset();
+      toast.success("Registrasi berhasil!");
+    } catch (error: any) {
+      console.log(error);
+      const message = error?.response?.data?.message;
+      if (message === "REGISTERED_USER") {
+        toast.error("Email sudah terdaftar. Silakan login.");
+        router.replace("/auth/login");
+        return;
+      } else {
+        toast.error("Terjadi kesalahan saat registrasi.");
+      }
+
+      toast.error("Something went wrong!");
     }
   };
 
@@ -108,60 +106,13 @@ export default function LoginPage() {
               Alamat email teridentifikasi
             </span>
           </div> */}
-
-          <div hidden={!showLoginPass} className="mt-2">
-            <TooltipHover label="Fitur login dengan kata sandi akan dihapus. Pastikan emailmu valid untuk login melalui email atau Google">
-              <label className="text-s-regular mb-2.5" htmlFor="password">
-                Password
-              </label>
-            </TooltipHover>
-            <div className="w-full flex flex-col gap-5 relative">
-              <Input
-                {...register("password")}
-                className={`  ${
-                  errors.password
-                    ? "focus-visible:ring-danger-main hover:border-danger-main hover:border-2"
-                    : "focus-visible:ring-primary-main hover:border-primary-main hover:border-2"
-                }`}
-                type={showPassword ? "text" : "password"}
-              />
-
-              {showPassword ? (
-                <button
-                  type="button"
-                  className="absolute size-5 right-2 top-1/4 cursor-pointer"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                >
-                  <EyeSlashIcon />
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="absolute size-5 right-2 top-1/4 cursor-pointer"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                >
-                  <EyeIcon />
-                </button>
-              )}
-            </div>
-            {errors.password && (
-              <div className="flex items-center mt-2 gap-2">
-                <ExclamationTriangleIcon className="text-danger-main size-5" />
-                <p className="text-danger-main text-sm">
-                  {errors.password.message}
-                </p>
-              </div>
-            )}
-          </div>
         </form>
 
         {/* Btn Send Email Login */}
         <div className="flex flex-col gap-3 mt-5">
           <YellowButton
-            hidden={showLoginPass}
             className="w-full"
             onClick={() => {
-              setValue("loginByPassword", false);
               handleSubmit(onSubmit)();
             }}
             disabled={isSubmitting}
@@ -173,25 +124,6 @@ export default function LoginPage() {
               </>
             ) : (
               "Daftar dengan Email"
-            )}
-          </YellowButton>
-          {/* Btn Login Manually */}
-          <YellowButton
-            className="w-full"
-            hidden={!showLoginPass}
-            onClick={() => {
-              setValue("loginByPassword", true);
-              handleSubmit(onSubmit)();
-            }}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <>
-                <Spinner />
-                <span>Please wait</span>
-              </>
-            ) : (
-              "Masuk"
             )}
           </YellowButton>
         </div>

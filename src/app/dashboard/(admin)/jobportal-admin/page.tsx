@@ -12,9 +12,12 @@ import { formatSalaryToRupiah } from "@/utils/formatSalaryToRupiah";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import CreateNewJob from "../components/CreateJobModals";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import DashboardWrapper from "../../dashboardWrapper";
+import { toast } from "sonner";
+import { apiCall } from "@/helper/apiCall";
+import { useUserStore } from "@/stores/user-store";
 
 // const dummyJob: any = [];
 
@@ -44,6 +47,25 @@ const jobStatusBadge = (status: IJobDetails["jobStatus"]) => {
 export default function AdminJobPortal() {
   const [openCreateJob, setOpenCreateJob] = useState(false);
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const user = useUserStore((state) => state.user);
+  // const clearUser = useUserStore((state) => state.clearUser);
+
+  const filteredJobs = dummyJob.filter(
+    (job) =>
+      job.jobTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      job.jobStatus.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    const token = localStorage.getItem("user_token");
+    if (!token) {
+      toast.error("Silakan Login Dulu");
+      router.replace("/auth/login");
+    }
+  }, []);
+
 
   return (
     <>
@@ -54,16 +76,18 @@ export default function AdminJobPortal() {
               <Input
                 placeholder="Search by job details"
                 className="w-full bg-neutral-10 border-border"
+                value={searchQuery ?? ""}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <MagnifyingGlassIcon className="absolute top-2 right-2 size-5 stroke-2 text-primary-main" />
             </div>
 
-            {dummyJob.length > 0 ? (
+            {filteredJobs.length > 0 ? (
               <section
                 id="job-list"
                 className="grid grid-cols-1 xl:grid-cols-2 gap-5"
               >
-                {dummyJob.map((job, idx) => (
+                {filteredJobs.map((job, idx) => (
                   <Card key={idx}>
                     <CardContent>
                       <div className="flex gap-5 mb-2">

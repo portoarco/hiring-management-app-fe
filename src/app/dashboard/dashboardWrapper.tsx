@@ -1,11 +1,13 @@
 "use client";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { apiCall } from "@/helper/apiCall";
+import { useUserStore } from "@/stores/user-store";
 import { LogOutIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 interface IDashboardWrapper {
   children: React.ReactNode;
@@ -13,6 +15,22 @@ interface IDashboardWrapper {
 
 export default function DashboardWrapper({ children }: IDashboardWrapper) {
   const router = useRouter();
+  const setUser = useUserStore((state) => state.setUser);
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    async function getUserData() {
+      const token = localStorage.getItem("user_token");
+      try {
+        const res = await apiCall.post(`/api/user/data`, { data: { token } });
+        setUser(res.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getUserData();
+  }, []);
+
   return (
     <>
       {" "}
@@ -36,7 +54,7 @@ export default function DashboardWrapper({ children }: IDashboardWrapper) {
               className="cursor-pointer"
               // onClick={() => setOpenDropdownProfile((prev) => !prev)}
             >
-              <AvatarImage src={"/avatar.png"}></AvatarImage>
+              <AvatarImage src={user?.avatar}></AvatarImage>
             </Avatar>
             {/* <DropdownProfile
             open={openDropdownProfile}
@@ -45,7 +63,10 @@ export default function DashboardWrapper({ children }: IDashboardWrapper) {
             <Button
               variant={"destructive"}
               className="cursor-pointer rounded-xl"
-              onClick={() => router.replace("/")}
+              onClick={() => {
+                localStorage.removeItem("user_token");
+                router.replace("/");
+              }}
             >
               <LogOutIcon className="size-4 font-medium" />
               <span className="font-medium max-sm:hidden">Logout</span>

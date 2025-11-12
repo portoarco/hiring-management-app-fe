@@ -3,7 +3,9 @@ import TooltipHover from "@/components/tooltip-awareness";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 import YellowButton from "@/components/yellow-button";
+import { LoginSchema, loginSchema } from "@/lib/schema/loginSchema";
 import {
   EnvelopeIcon,
   ExclamationTriangleIcon,
@@ -11,16 +13,15 @@ import {
   EyeSlashIcon,
   KeyIcon,
 } from "@heroicons/react/24/outline";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import AuthLayoutWrapper from "../layoutWrapper";
-import { useForm } from "react-hook-form";
-import z from "zod";
-import { LoginSchema, loginSchema } from "@/lib/schema/loginSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import AuthLayoutWrapper from "../layoutWrapper";
+import { apiCall } from "@/helper/apiCall";
 
 export default function LoginPage() {
   const [showLoginPass, setShowLoginPass] = useState(false);
@@ -43,15 +44,26 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginSchema) => {
-    console.log("Mulai submit:", data);
-    // Simulasi pemanggilan API selama 2 detik
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    if (data.loginByPassword === true) {
-      console.log("Anda login dengan password");
-    } else {
-      console.log("Anda login dengan email");
-      router.replace(`auth/auth-mailer/${encodeURIComponent(data.email)}`);
-      reset();
+    try {
+      if (data.loginByPassword === true) {
+        const res = await apiCall.post("/api/auth/login-manual", data);
+        const token = res.data.token;
+        router.replace(`/auth-token/login/${token}`);
+        return;
+      }
+      const res = await apiCall.post("/api/auth/login-email", data);
+      if (!res) return toast.error("Something went wrong");
+      router.replace(`/auth/auth-mailer/${encodeURIComponent(data.email)}`);
+      toast.success("Login Berhasil");
+    } catch (error: any) {
+      console.log(error);
+      if (error.status === 404) {
+        return toast.error("Email Tidak Terdaftar");
+      }
+      if (error.status === 401) {
+        return toast.error("Password atau Email  Salah");
+      }
+      toast.error("Something went wrong");
     }
   };
 

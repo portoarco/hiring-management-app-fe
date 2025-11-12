@@ -44,9 +44,13 @@ export default function JobDetails({
               </div>
               <div>
                 <YellowButton
-                  onClick={() =>
-                    router.push(`/dashboard/apply-job/${jobData.id}`)
-                  }
+                  onClick={() => {
+                    localStorage.setItem(
+                      "selectedJob",
+                      JSON.stringify(jobData)
+                    );
+                    router.push(`/dashboard/apply-job/${jobData.id}`);
+                  }}
                 >
                   Apply
                 </YellowButton>
